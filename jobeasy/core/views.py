@@ -6,6 +6,7 @@ from .forms import ResumeUploadForm
 from django.contrib.auth.decorators import login_required
 from .skillmatcher import analyze_resume_text  
 import json
+from .forms import UserProfileForm
 from django.http import JsonResponse
 from django.conf import settings
 import os
@@ -45,7 +46,7 @@ def display_skills(request):
         # Handle case where no resume text is available
         return render(request, 'core/no_resume_uploaded.html')
 
-
+@login_required
 def dashboard(request):
     return render(request, 'core/dashboard.html')
 
@@ -74,3 +75,15 @@ def handle_resume_upload(request):
         )
         return redirect('core:dashboard')
     return redirect('core:dashboard')
+
+@login_required
+def update_profile(request):
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect('core:dashboard')
+    else:
+        form = UserProfileForm(instance=request.user.profile)
+
+    return render(request, 'core/update_profile.html', {'form': form})

@@ -1,0 +1,5 @@
+.user-icon {
+    height: 30px; /* Adjust based on your icon size */
+    width: 30px; /* Adjust based on your icon size */
+    border-radius: 50%; /* Makes the image round */
+}

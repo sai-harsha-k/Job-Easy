@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from django.contrib.auth.views import LoginView,LogoutView
+from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 
 app_name = 'core'
 
@@ -14,5 +15,8 @@ urlpatterns = [
     path('quiz/', views.quiz, name='quiz'),
     path('quiz-questions/', views.quiz_questions, name='quiz_questions'),
     path('display-skills/', views.display_skills, name='display_skills'),
+    path('update-profile/', views.update_profile, name='update_profile'),
+    path('password_change/', PasswordChangeView.as_view(template_name='core/password_change_form.html'), name='change_password'),
+    path('password_change/done/', PasswordChangeDoneView.as_view(template_name='core/password_change_done.html'), name='password_change_done'),
 
 ]

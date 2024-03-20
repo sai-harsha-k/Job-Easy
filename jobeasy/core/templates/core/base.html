@@ -3,12 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
     <title>{% block title %}JobEasy{% endblock %}</title>
-    <!-- Link to CSS frameworks like Bootstrap, your own stylesheet, or other assets -->
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
     <style>
         body {
             padding-top: 80px;
+        }
+        .user-icon {
+            height: 30px;
+            width: 30px;
+            border-radius: 50%;
+            object-fit: cover;
         }
     </style>
 </head>
@@ -23,16 +32,33 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'core:dashboard' %}">Home</a>
                 </li>
-                <!-- Add more navigation items here if needed -->
+                {% if user.is_authenticated %}
+                <!-- Button to trigger resume update modal -->
+                <li class="nav-item">
+                    <button class="btn btn-link nav-link" data-toggle="modal" data-target="#updateResumeModal">Update Resume</button>
+                </li>
+                {% endif %}
             </ul>
-            
-            <!-- Logout button, only shown to authenticated users -->
             {% if user.is_authenticated %}
-            <form class="form-inline ml-auto" action="{% url 'core:logout' %}" method="post">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Logout</button>
-            </form>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="{% static 'core/images/user_icon.png' %}" alt="User" class="user-icon">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'core:update_profile' %}">Update Profile</a>
+                        <a class="dropdown-item" href="{% url 'core:change_password' %}">Change Password</a>
+                        <div class="dropdown-divider"></div>
+                        <!-- Logout form -->
+                        <form action="{% url 'core:logout' %}" method="post" class="dropdown-item">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link p-0">Logout</button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
             {% endif %}
+            
         </div>
     </nav>
 
@@ -42,11 +68,32 @@
         {% endblock %}
     </main>
 
-    <!-- <footer class="footer mt-auto py-3 bg-light">
-        <div class="container">
-            <span class="text-muted">Place sticky footer content here.</span>
+    <!-- Resume Update Modal -->
+    <div class="modal fade" id="updateResumeModal" tabindex="-1" aria-labelledby="updateResumeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateResumeModalLabel">Update Your Resume</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" enctype="multipart/form-data" action="{% url 'core:upload_resume' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="resume">Choose file</label>
+                            <input type="file" class="form-control-file" id="resume" name="resume" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </footer> -->
+    </div>
 
     <!-- JS, Popper.js, and jQuery for Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
