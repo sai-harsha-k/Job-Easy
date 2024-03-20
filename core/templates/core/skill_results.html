@@ -1,0 +1,9 @@
+{% extends 'core/base.html' %}  <!-- Assume you have a base template -->
+{% block content %}
+    <h2>Top Skills</h2>
+    <ul>
+    {% for skill, details in skills %}
+        <li>{{ skill }} (Weight: {{ details.weight }}, Sections: {{ details.sections|join:", " }})</li>
+    {% endfor %}
+    </ul>
+{% endblock %}

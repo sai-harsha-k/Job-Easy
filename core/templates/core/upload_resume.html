@@ -1,0 +1,9 @@
+{% extends 'core/base.html' %}  <!-- Assume you have a base template -->
+{% block content %}
+    <h2>Upload Resume</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload</button>
+    </form>
+{% endblock %}

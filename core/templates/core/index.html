@@ -1,0 +1,11 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Home - JobEasy{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Welcome to JobEasy</h1>
+    <p>This is the homepage of the JobEasy application. From here, you can navigate to various parts of the website.</p>
+    <a href="{% url 'core:upload_resume' %}" class="btn btn-primary">Upload Your Resume</a>
+</div>
+{% endblock %}

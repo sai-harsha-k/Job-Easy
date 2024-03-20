@@ -1,0 +1,64 @@
+<!-- templates/core/dashboard.html -->
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Card for Quiz -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Personality Quiz</h5>
+                    <p class="card-text">Take our personality quiz to understand more about yourself.</p>
+                    <a href="{% url 'core:quiz' %}" class="btn btn-primary">Start Quiz</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card for Resume Upload -->
+        <!-- Inside dashboard.html, update the card for Skills Display -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Your Skills</h5>
+                    <p class="card-text">See the skills extracted from your resume.</p>
+                    <a href="{% url 'core:display_skills' %}" class="btn btn-primary">View Skills</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal fade" id="uploadResumeModal" tabindex="-1" aria-labelledby="uploadResumeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadResumeModalLabel">Upload Your Resume</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" enctype="multipart/form-data" action="{% url 'core:upload_resume' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <input type="file" name="resume" class="form-control" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function(){
+    // Show the modal on page load if the user has not uploaded a resume
+    {% if not request.user.profile.resume_text %}
+    $("#uploadResumeModal").modal('show');
+    {% endif %}
+});
+</script>
+{% endblock %}

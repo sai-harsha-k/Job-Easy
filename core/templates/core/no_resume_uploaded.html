@@ -1,0 +1,12 @@
+<!-- templates/core/no_resume_uploaded.html -->
+{% extends 'core/base.html' %}
+
+{% block title %}No Resume Uploaded{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>No Resume Uploaded</h2>
+    <p>You have not uploaded a resume yet. Please go to the dashboard and upload your resume to view your skills.</p>
+    <a href="{% url 'core:dashboard' %}" class="btn btn-primary">Go to Dashboard</a>
+</div>
+{% endblock %}

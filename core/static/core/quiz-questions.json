@@ -1,0 +1,122 @@
+[
+    {
+        "optionA": "I feel drained after socializing and need downtime to recharge.",
+        "optionB": "I gain energy from being around people and feel bored when alone for too long.",
+        "traitA": "I",
+        "traitB": "E"
+    },
+    {
+        "optionA": "I prefer having a few close friends rather than a wide circle of acquaintances.",
+        "optionB": "I like expanding my social network and meeting new people.",
+        "traitA": "I",
+        "traitB": "E"
+    },
+    {
+        "optionA": "I express myself better in writing than in conversation.",
+        "optionB": "I find it easy to express myself verbally and enjoy spontaneous conversations.",
+        "traitA": "I",
+        "traitB": "E"
+    },
+    {
+        "optionA": "I enjoy solitude and often seek time for personal reflection.",
+        "optionB": "I prefer to work and spend leisure time in group settings.",
+        "traitA": "I",
+        "traitB": "E"
+    },
+    {
+        "optionA": "In meetings or classes, I prefer to listen rather than contribute to the discussion.",
+        "optionB": "I actively participate in discussions and enjoy sharing my thoughts.",
+        "traitA": "I",
+        "traitB": "E"
+    },
+    {
+        "optionA": "I rely on past experiences and proven methods when making decisions.",
+        "optionB": "I look for future possibilities and enjoy imagining what could be.",
+        "traitA": "S",
+        "traitB": "N"
+    },
+    {
+        "optionA": "I focus on details and concrete information rather than the big picture.",
+        "optionB": "I prefer to think about ideas and concepts, even when they're abstract.",
+        "traitA": "S",
+        "traitB": "N"
+    },
+    {
+        "optionA": "I learn best through hands-on experience and tangible examples.",
+        "optionB": "I enjoy learning new theories and prefer a conceptual approach.",
+        "traitA": "S",
+        "traitB": "N"
+    },
+    {
+        "optionA": "I am practical and prefer dealing with the here and now.",
+        "optionB": "I am drawn to innovation and thinking about future implications.",
+        "traitA": "S",
+        "traitB": "N"
+    },
+    {
+        "optionA": "I trust information that I can see, touch, or hear directly.",
+        "optionB": "I trust my intuition and insights, even if I can't immediately explain them.",
+        "traitA": "S",
+        "traitB": "N"
+    },
+    {
+        "optionA": "I make decisions based on logical analysis and objective principles.",
+        "optionB": "I make decisions by weighing what people care about and the points of harmony.",
+        "traitA": "T",
+        "traitB": "F"
+    },
+    {
+        "optionA": "I believe truth should be more important than being tactful.",
+        "optionB": "I often prioritize diplomacy and people's feelings over the cold, hard truth.",
+        "traitA": "T",
+        "traitB": "F"
+    },
+    {
+        "optionA": "I am known for my fairness and impartiality in decision-making.",
+        "optionB": "I am known for my empathy and consideration of others' well-being.",
+        "traitA": "T",
+        "traitB": "F"
+    },
+    {
+        "optionA": "I find it easy to remain detached and objective in emotional situations.",
+        "optionB": "I get emotionally involved in situations and care about how others feel.",
+        "traitA": "T",
+        "traitB": "F"
+    },
+    {
+        "optionA": "In conflicts, I stand firm on my principles and logic.",
+        "optionB": "In conflicts, I strive for harmony and look for solutions that satisfy everyone.",
+        "traitA": "T",
+        "traitB": "F"
+    },
+    {
+        "optionA": "I like to have things decided and dislike leaving things up in the air.",
+        "optionB": "I like to stay open to new information and options, even if it means changing my plans.",
+        "traitA": "J",
+        "traitB": "P"
+    },
+    {
+        "optionA": "I prefer to follow a plan and like when things are organized and structured.",
+        "optionB": "I prefer to be spontaneous and enjoy adapting as I go along. (P)",
+        "traitA": "J",
+        "traitB": "P"
+    },
+    {
+        "optionA": "I manage deadlines well and work on tasks well before they are due. (J)",
+        "optionB": "I work best under pressure and am motivated by looming deadlines.",
+        "traitA": "J",
+        "traitB": "P"
+    },
+    {
+        "optionA": "I like to have control over my environment and organize it to suit my needs.",
+        "optionB": "I am flexible and adapt easily to different environments and situations.",
+        "traitA": "J",
+        "traitB": "P"
+    },
+    {
+        "optionA": "I prefer closure in discussions and decisions, even if the conversation is interesting.",
+        "optionB": "I enjoy exploring various perspectives and keeping discussions open.",
+        "traitA": "J",
+        "traitB": "P"
+    }
+]
