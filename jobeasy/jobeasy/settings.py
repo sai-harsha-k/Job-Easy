@@ -76,10 +76,15 @@ WSGI_APPLICATION = 'jobeasy.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'jobeasy',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': 'localhost',  # Or an IP of your MySQL server
+        'PORT': '3306',
     }
 }
+
 
 
 # Password validation
@@ -127,5 +132,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'core:dashboard'
+
+LOGIN_URL = 'core:login'
 
 LOGOUT_REDIRECT_URL = '/core/login/'

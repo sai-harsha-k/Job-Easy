@@ -15,6 +15,11 @@ from django.shortcuts import render, redirect
 from .models import UserProfile
 from .text_Extraction import process_uploaded_resume
 from .models import UserProfile
+from django.contrib.auth.views import PasswordChangeDoneView
+
+class CustomPasswordChangeDoneView(PasswordChangeDoneView):
+    template_name = 'core/password_change_done.html'
+
 
 def index(request):
     """Render and return the app's main or 'index' page."""

@@ -1,0 +1,24 @@
+step - 1:
+
+create database jobeasy
+
+step - 2:
+
+use jobeasy
+CREATE TABLE JobDetails (
+    Experience varchar(255),
+    Qualifications varchar(255),
+    Salary_Range varchar(255),
+    location varchar(255),
+    Country varchar(255),
+    Work Type varchar(255),
+    Job_Posting_Date date,
+    Job_Title varchar(255),
+    Role varchar(255),
+    Job_Portal varchar(255),
+    Job_Description text,
+    skills text,
+    Responsibilities text,
+    Company varchar(255),
+    mbti varchar(4)
+);
