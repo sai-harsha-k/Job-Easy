@@ -14,7 +14,17 @@
                 </div>
             </div>
         </div>
-
+        {% if mbti_type %}
+        <div class="col-md-6 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Jobs Matching Your Personality ({{ mbti_type }})</h5>
+                    <p class="card-text">Explore jobs that suit your personality.</p>
+                    <a href="{% url 'core:matching_jobs' mbti_type=mbti_type %}" class="btn btn-primary">View Matching Jobs</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
         <!-- Card for Resume Upload -->
         <!-- Inside dashboard.html, update the card for Skills Display -->
         <div class="col-md-6">

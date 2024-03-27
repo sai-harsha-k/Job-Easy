@@ -82,6 +82,7 @@ class UserProfile(models.Model):
     resume_text = models.TextField(blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
+    mbti_type = models.CharField(max_length=4, blank=True, null=True)
 
     def __str__(self):
         return self.user.username
@@ -133,6 +134,7 @@ class DjangoSession(models.Model):
 
 
 class Jobdetails(models.Model):
+    job_id = models.AutoField(primary_key=True, db_column='job_id')
     experience = models.CharField(db_column='Experience', max_length=255, blank=True, null=True)  # Field name made lowercase.
     qualifications = models.CharField(db_column='Qualifications', max_length=255, blank=True, null=True)  # Field name made lowercase.
     salary_range = models.CharField(db_column='Salary_Range', max_length=255, blank=True, null=True)  # Field name made lowercase.
@@ -147,7 +149,7 @@ class Jobdetails(models.Model):
     skills = models.TextField(blank=True, null=True)
     responsibilities = models.TextField(db_column='Responsibilities', blank=True, null=True)  # Field name made lowercase.
     company = models.CharField(db_column='Company', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    mbti = models.CharField(max_length=4, blank=True, null=True)
+    mbti = models.CharField(max_length=4, blank=True, null=True, db_index=True)
 
     class Meta:
         managed = False

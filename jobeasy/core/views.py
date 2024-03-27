@@ -16,6 +16,12 @@ from .models import UserProfile
 from .text_Extraction import process_uploaded_resume
 from .models import UserProfile
 from django.contrib.auth.views import PasswordChangeDoneView
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import UserProfile
+from django.core.paginator import Paginator
+from django.shortcuts import render, get_object_or_404
+from .models import Jobdetails
 
 class CustomPasswordChangeDoneView(PasswordChangeDoneView):
     template_name = 'core/password_change_done.html'
@@ -53,7 +59,14 @@ def display_skills(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'core/dashboard.html')
+    mbti_type = None
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+        mbti_type = user_profile.mbti_type
+    except UserProfile.DoesNotExist:
+        pass  # Handle case where user profile does not exist, if necessary
+
+    return render(request, 'core/dashboard.html', {'mbti_type': mbti_type})
 
 def quiz(request):
     return render(request, 'core/quiz.html')
@@ -92,3 +105,28 @@ def update_profile(request):
         form = UserProfileForm(instance=request.user.profile)
 
     return render(request, 'core/update_profile.html', {'form': form})
+
+@csrf_exempt
+def save_mbti_to_profile(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        mbti_type = data.get('mbti_type')
+        user_profile, created = UserProfile.objects.get_or_create(user=request.user)
+        user_profile.mbti_type = mbti_type
+        user_profile.save()
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'failed'}, status=400)
+
+def matching_jobs_view(request, mbti_type):
+    # Fetch jobs matching the MBTI type
+    matching_jobs = Jobdetails.objects.filter(mbti=mbti_type)
+
+    # Set up pagination
+    paginator = Paginator(matching_jobs, 10)  # Show 10 jobs per page
+
+    # Get the page number from the request
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Render the template with the paginated jobs
+    return render(request, 'core/matching_jobs.html', {'page_obj': page_obj, 'mbti_type': mbti_type})

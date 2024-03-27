@@ -18,5 +18,6 @@ urlpatterns = [
     path('update-profile/', views.update_profile, name='update_profile'),
     path('password_change/', PasswordChangeView.as_view(template_name='core/password_change_form.html', success_url='/core/password_change/done/'), name='change_password'),
     path('password_change/done/', views.CustomPasswordChangeDoneView.as_view(), name='password_change_done'),
-   
+    path('save-mbti-profile/', views.save_mbti_to_profile, name='save_mbti_profile'),
+    path('matching-jobs/<str:mbti_type>/', views.matching_jobs_view, name='matching_jobs'),
 ]
