@@ -41,23 +41,52 @@ document.addEventListener('DOMContentLoaded', () => {
             function displayResult(selections) {
                 const personalityType = calculatePersonalityType(selections);
                 document.getElementById('quiz').innerHTML = `<h2>Your personality type is: ${personalityType}</h2> <button onclick="location.reload()">Restart</button>`;
+                sendMbtiType(personalityType);
             }
 
             function calculatePersonalityType(selections) {
                 const counts = { I: 0, E: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
-            
-                // Increment the count for each selected trait
-                selections.forEach(trait => {
-                    counts[trait]++;
-                });
-                //Choosing the trait
+                selections.forEach(trait => counts[trait]++);
                 let personalityType = '';
                 personalityType += counts['I'] > counts['E'] ? 'I' : 'E';
                 personalityType += counts['S'] > counts['N'] ? 'S' : 'N';
                 personalityType += counts['T'] > counts['F'] ? 'T' : 'F';
                 personalityType += counts['J'] > counts['P'] ? 'J' : 'P';
-            
                 return personalityType;
+            }
+
+            function sendMbtiType(mbtiType) {
+                fetch('/core/save-mbti-profile/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 'mbti_type': mbtiType }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        console.log('MBTI type saved to user profile.');
+                    } else {
+                        console.error('Failed to save MBTI type.');
+                    }
+                });
+            }
+
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
             }
         })
         .catch(error => console.error('Failed to load quiz questions:', error));

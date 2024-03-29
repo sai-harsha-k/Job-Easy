@@ -5,8 +5,9 @@
     <h1>Jobs Matching Your Personality: {{ mbti_type }}</h1>
     {% for job in page_obj %}
         <div>
-            <h2>{{ job.job_title }}</h2>
-            <p>{{ job.company }}</p>
+            <h2><a href="{% url 'core:job_details' job.job_id %}" class="list-group-item list-group-item-action">{{ job.job_title }}</a></h2>
+            <p>Location: {{ job.location }},     Company: {{ job.company }}</p>
+            
             <!-- Add more job details as needed -->
         </div>
     {% empty %}

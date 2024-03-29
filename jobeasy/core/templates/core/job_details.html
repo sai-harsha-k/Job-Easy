@@ -1,0 +1,24 @@
+<!-- core/templates/core/job_details.html -->
+
+{% extends "core/base.html" %}
+
+{% block content %}
+<div class="job-details">
+    <h2>Job Title: {{ job.job_title }}</h2>
+    <p><strong>Company:</strong> {{ job.company }}</p>
+    <p><strong>Location:</strong> {{ job.location }}</p>
+    <p><strong>Experience Required:</strong> {{ job.experience }}</p>
+    <p><strong>Qualifications:</strong> {{ job.qualifications }}</p>
+    <p><strong>Salary Range:</strong> {{ job.salary_range }}</p>
+    <p><strong>Job Posting Date:</strong> {{ job.job_posting_date }}</p>
+    <p><strong>Job Type:</strong> {{ job.work_type }}</p>
+    <p><strong>Role:</strong> {{ job.role }}</p>
+    <p><strong>Job Portal:</strong> {{ job.job_portal }}</p>
+    <p><strong>Job Description:</strong> {{ job.job_description }}</p>
+    <p><strong>Skills Required:</strong> {{ job.skills }}</p>
+    <p><strong>Responsibilities:</strong> {{ job.responsibilities }}</p>
+    <p><strong>MBTI:</strong> {{ job.mbti }}</p>
+</div>
+
+<a href="{% url 'core:dashboard' %}">Back to Search</a>
+{% endblock %}

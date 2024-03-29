@@ -1,0 +1,24 @@
+<!-- core/templates/core/matching_jobs.html -->
+
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h1>Matching Jobs</h1>
+    {% if jobs %}
+        <ul>
+            {% for job in jobs %}
+                <li>
+                    <strong>{{ job.job_title }}</strong> - {{ job.company }}
+                    <br>
+                    Location: {{ job.location }} | Work Type: {{ job.work_type }} | Posted on: {{ job.job_posting_date }}
+                    <br>
+                    <a href="{% url 'core:job_details' job.job_id %}">View Details</a>
+
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No matching jobs found.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -4,8 +4,29 @@
 {% block content %}
 <div class="container mt-4">
     <div class="row">
+        <!-- Search Input Field and Suggestions Container -->
+        <div class="col-12 mt-4">
+            <div class="card light-blue-card"> <!-- Added custom class here -->
+                <div class="card-body">
+                    <h5 class="card-title">Search Jobs</h5>
+                    <div class="form-group">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search jobs...">
+                    </div>
+                    <div id="suggestionsBox"></div> <!-- Container for autocomplete suggestions -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Search Jobs by Your Skills</h5>
+                    <p class="card-text">Find jobs that match the skills extracted from your resume.</p>
+                    <a href="{% url 'core:search_jobs_by_skills' %}" class="btn btn-primary">Search by Skills</a>
+                </div>
+            </div>
+        </div>
         <!-- Card for Quiz -->
-        <div class="col-md-6">
+        <div class="col-md-6 mt-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Personality Quiz</h5>
@@ -27,7 +48,7 @@
         {% endif %}
         <!-- Card for Resume Upload -->
         <!-- Inside dashboard.html, update the card for Skills Display -->
-        <div class="col-md-6">
+        <div class="col-md-6 mt-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Your Skills</h5>
@@ -36,8 +57,6 @@
                 </div>
             </div>
         </div>
-        
-
     </div>
     <div class="modal fade" id="uploadResumeModal" tabindex="-1" aria-labelledby="uploadResumeModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -65,11 +84,98 @@
 
 {% block extra_js %}
 <script>
-$(document).ready(function(){
-    // Show the modal on page load if the user has not uploaded a resume
-    {% if not request.user.profile.resume_text %}
-    $("#uploadResumeModal").modal('show');
-    {% endif %}
-});
+    $(document).ready(function(){
+        {% if not request.user.profile.resume_text %}
+        $("#uploadResumeModal").modal('show');
+        {% endif %}
+        const searchInput = document.getElementById('searchInput');
+        const suggestionsBox = document.getElementById('suggestionsBox');
+
+        let currentSuggestionIndex = -1;
+
+        searchInput.addEventListener('input', function(event) {
+            const input = event.target.value;
+
+            fetch(`/core/autocomplete_search/?q=${encodeURIComponent(input)}`)
+                .then(response => response.json())
+                .then(data => {
+                    suggestionsBox.innerHTML = '';
+
+                    data.suggestions.forEach((item, index) => {
+                        const div = document.createElement('div');
+                        div.textContent = item.text;
+                        div.classList.add('suggestion-item');
+
+                        const typedIndex = item.text.toLowerCase().indexOf(input.toLowerCase());
+                        const typedPortion = item.text.substring(typedIndex, typedIndex + input.length);
+                        const remainingPortion = item.text.substring(typedIndex + input.length);
+                        div.innerHTML = `${item.text.substring(0, typedIndex)}<span class="typed">${typedPortion}</span>${remainingPortion}`;
+
+                        div.addEventListener('click', () => {
+                            // Fill the search input with the clicked suggestion's text
+                            //searchInput.value = item.text;
+                            // Redirect to the suggestion's URL if needed
+                            //window.location.href = item.url;
+                            window.location.href = `/core/search/?q=${encodeURIComponent(item.text)}`;
+                        });
+                        suggestionsBox.appendChild(div);
+
+                        if (index === 0) {
+                            currentSuggestionIndex = 0;
+                            div.classList.add('highlighted');
+                        }
+                    });
+                });
+        });
+
+        searchInput.addEventListener('keydown', function(event) {
+            const suggestions = document.querySelectorAll('.suggestion-item');
+            const suggestionsLength = suggestions.length;
+
+            if (event.key === 'Enter') {
+                const input = event.target.value;
+                window.location.href = `/core/search/?q=${encodeURIComponent(input)}`;
+            } else if (event.key === 'Tab' && suggestionsLength > 0) {
+                event.preventDefault();
+                if (currentSuggestionIndex !== -1) {
+                    const highlightedSuggestion = suggestions[currentSuggestionIndex];
+                    searchInput.value = highlightedSuggestion.textContent;
+                }
+            } else if (event.key === 'ArrowDown' && suggestionsLength > 0) {
+                event.preventDefault();
+                if (currentSuggestionIndex < suggestionsLength - 1) {
+                    suggestions[currentSuggestionIndex].classList.remove('highlighted');
+                    currentSuggestionIndex++;
+                    suggestions[currentSuggestionIndex].classList.add('highlighted');
+                    searchInput.value = suggestions[currentSuggestionIndex].textContent;
+                }
+            } else if (event.key === 'ArrowUp' && suggestionsLength > 0) {
+                event.preventDefault();
+                if (currentSuggestionIndex > 0) {
+                    suggestions[currentSuggestionIndex].classList.remove('highlighted');
+                    currentSuggestionIndex--;
+                    suggestions[currentSuggestionIndex].classList.add('highlighted');
+                    searchInput.value = suggestions[currentSuggestionIndex].textContent;
+                }
+            }
+        });
+    });
 </script>
+
+<style>
+    .typed {
+        font-weight: bold; /* Example: Make the typed portion bold */
+        color: blue; /* Example: Make the typed portion blue */
+    }
+
+    .highlighted {
+        background-color: #f0f0f0; /* Example: Highlight the currently selected suggestion */
+    }
+
+    .light-blue-card {
+        background-color: #add8e6; /* LightBlue color */
+    }
+</style>
 {% endblock %}
+
+

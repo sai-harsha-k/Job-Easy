@@ -20,4 +20,8 @@ urlpatterns = [
     path('password_change/done/', views.CustomPasswordChangeDoneView.as_view(), name='password_change_done'),
     path('save-mbti-profile/', views.save_mbti_to_profile, name='save_mbti_profile'),
     path('matching-jobs/<str:mbti_type>/', views.matching_jobs_view, name='matching_jobs'),
+    path('autocomplete_search/', views.autocomplete_search, name='autocomplete_search'),
+    path('jobs/<int:job_id>/', views.job_details, name='job_details'),
+    path('search/', views.search, name='search'),
+    path('search-jobs-by-skills/', views.search_jobs_by_skills, name='search_jobs_by_skills'),
 ]
