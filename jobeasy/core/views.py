@@ -25,7 +25,8 @@ from .models import Jobdetails
 from django.db.models import Q
 from django.db.models.expressions import RawSQL
 from django.urls import reverse
-from .utils import create_inverted_index
+from .utils import create_inverted_index, refine_mbti_with_baseline,prepro
+import joblib
 
 class CustomPasswordChangeDoneView(PasswordChangeDoneView):
     template_name = 'core/password_change_done.html'
@@ -84,6 +85,66 @@ def quiz_questions(request):
     with open(file_path, 'r') as file:
         questions = json.load(file)
     return JsonResponse(questions, safe=False)
+
+@login_required
+@csrf_exempt
+def final_mbti_prediction(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        initial_mbti_type = data.get('initial_mbti_type')
+        text_answers = data.get('text_answers')
+
+        # Preprocess the text answers
+        preprocessed_text = prepro(text_answers)
+
+        # Initialize dictionaries to store predictions and confidences for each dimension
+        predictions = {}
+        confidences = {}
+
+        # Define confidence thresholds for each dimension
+        thresholds = {'I-E': 0.75, 'N-S': 0.75, 'T-F': 0.65, 'J-P': 0.65}
+
+        # Load, predict, and obtain confidences with CatBoost for I-E, N-S, and J-P dimensions
+        for dimension in ['I-E', 'N-S', 'J-P']:
+            vectorizer_path = f'core/ml_models/vectorizer_{dimension}.pkl'
+            model_path = f'core/ml_models/{dimension}_CatBoost.pkl'
+            
+            vectorizer = joblib.load(vectorizer_path)
+            catboost_model = joblib.load(model_path)
+
+            vectorized_text = vectorizer.transform([preprocessed_text])
+            prediction_proba = catboost_model.predict_proba(vectorized_text)
+
+            # Assuming the second column represents the probability of the positive class
+            confidence = prediction_proba[0][1]  
+            prediction = catboost_model.predict(vectorized_text)
+
+            predictions[dimension] = prediction[0]
+            confidences[dimension] = confidence
+
+        # Load, predict, and obtain confidences with SVM for T-F dimension
+        tf_vectorizer_path = 'core/ml_models/vectorizer_T-F.pkl'
+        tf_model_path = 'core/ml_models/T-F_SVM.pkl'
+        
+        tf_vectorizer = joblib.load(tf_vectorizer_path)
+        svm_model = joblib.load(tf_model_path)
+
+        vectorized_text = tf_vectorizer.transform([preprocessed_text])
+        # SVM's decision function can be used as a proxy for confidence scores
+        confidence = svm_model.decision_function(vectorized_text)[0]
+
+        tf_prediction = svm_model.predict(vectorized_text)
+        predictions['T-F'] = tf_prediction[0]
+        # Normalize SVM confidence to a [0,1] scale if necessary
+        confidences['T-F'] = (confidence + 1) / 2  
+
+        # Use predictions and confidences to refine the MBTI type
+        final_mbti_type = refine_mbti_with_baseline(initial_mbti_type, predictions, confidences, thresholds)
+
+        return JsonResponse({'final_mbti_type': final_mbti_type})
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
 
 
 def handle_resume_upload(request):

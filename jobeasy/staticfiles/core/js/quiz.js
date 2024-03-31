@@ -39,9 +39,49 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             function displayResult(selections) {
+                console.log("Displaying result...");  // Debugging line
                 const personalityType = calculatePersonalityType(selections);
-                document.getElementById('quiz').innerHTML = `<h2>Your personality type is: ${personalityType}</h2> <button onclick="location.reload()">Restart</button>`;
-                sendMbtiType(personalityType);
+                displayAdditionalQuestions(personalityType);
+            }
+            function displayAdditionalQuestions(initialMbtiType) {
+                document.getElementById('quiz').innerHTML = `
+                    <div>
+                        <label for="question1">How do you navigate challenges and setbacks in your journey?</label>
+                        <textarea id="question1"></textarea>
+                    </div>
+                    <div>
+                        <label for="question2">In what ways do you seek to grow and evolve as an individual?</label>
+                        <textarea id="question2"></textarea>
+                    </div>
+                    <button id="finalSubmit">Submit Answers</button>
+                `;
+        
+                document.getElementById('finalSubmit').addEventListener('click', () => {
+                    const answer1 = document.getElementById('question1').value;
+                    const answer2 = document.getElementById('question2').value;
+                    const combinedAnswers = `${answer1} ${answer2}`;
+                    sendTextForFinalPrediction(initialMbtiType, combinedAnswers);
+                });
+            }
+        
+            function sendTextForFinalPrediction(initialMbtiType, textAnswers) {
+                fetch('/core/final-mbti-prediction/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        'initial_mbti_type': initialMbtiType,
+                        'text_answers': textAnswers
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('quiz').innerHTML = `<h2>Your refined personality type is: ${data.final_mbti_type}</h2> <button onclick="location.reload()">Restart</button>`;
+                    sendMbtiType(data.final_mbti_type)
+                })
+                .catch(error => console.error('Failed to get the final MBTI prediction:', error));
             }
 
             function calculatePersonalityType(selections) {
