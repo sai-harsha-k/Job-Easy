@@ -55,11 +55,13 @@ document.addEventListener('DOMContentLoaded', () => {
             <div id="additional-questions">
                 <div>
                     <label for="question1">How do you navigate challenges and setbacks in your journey?</label>
-                    <textarea id="question1"></textarea>
+                    <br>
+                    <textarea id="question1" rows="6" cols="50"></textarea>
                 </div>
                 <div>
                     <label for="question2">In what ways do you seek to grow and evolve as an individual?</label>
-                    <textarea id="question2"></textarea>
+                    <br>
+                    <textarea id="question2" rows="6" cols="50"></textarea>
                 </div>
                 <button id="finalSubmit">Submit Answers</button>
             </div>
