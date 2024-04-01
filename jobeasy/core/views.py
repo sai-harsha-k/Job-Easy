@@ -140,6 +140,7 @@ def final_mbti_prediction(request):
 
         # Use predictions and confidences to refine the MBTI type
         final_mbti_type = refine_mbti_with_baseline(initial_mbti_type, predictions, confidences, thresholds)
+        print(final_mbti_type)
 
         return JsonResponse({'final_mbti_type': final_mbti_type})
 

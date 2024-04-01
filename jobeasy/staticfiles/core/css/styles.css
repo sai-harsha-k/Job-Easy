@@ -3,3 +3,27 @@
     width: 30px; /* Adjust based on your icon size */
     border-radius: 50%; /* Makes the image round */
 }
+
+#loadingAnimation {
+    width: 80%; /* Adjust based on your needs */
+    max-width: 400px; /* Set a maximum width */
+    height: auto; /* Let the height adjust proportionally */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto; /* Center horizontally */
+}
+
+@media (max-width: 768px) {
+    #loadingAnimation {
+        width: 80%; /* Adjust based on your needs */
+        max-width: 300px; /* Set a maximum width */
+    }
+}
+
+@media (min-width: 769px) {
+    #loadingAnimation {
+        width: 60%; /* Adjust based on your needs */
+        max-width: 500px; /* Set a maximum width */
+    }
+}

@@ -1,6 +1,9 @@
-<!-- templates/core/quiz.html -->
 {% extends 'core/base.html' %}
 {% load static %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4" id="quiz">
     <div id="question" class="question"></div>
@@ -13,9 +16,14 @@
         <label for="b" id="b_text"></label>
     </div>
     <button id="submit">Submit</button>
+    
+    <!-- Container for the Lottie loading animation, initially hidden -->
+    <div id="loadingAnimation" style="display: none;" data-animation-url="{% static 'core/animations/quiz_loading.json' %}"></div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script src="{% static 'core/js/quiz.js' %}"></script>
+<!-- Include Lottie Web library for the loading animation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.6/lottie.min.js"></script>
 {% endblock %}
