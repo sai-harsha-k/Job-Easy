@@ -17,7 +17,7 @@ from .text_Extraction import process_uploaded_resume
 from .models import UserProfile
 from django.contrib.auth.views import PasswordChangeDoneView
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from .models import UserProfile
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404
@@ -36,6 +36,7 @@ def index(request):
     """Render and return the app's main or 'index' page."""
     return render(request, 'core/index.html')
 
+@csrf_protect
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)

@@ -53,33 +53,67 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayAdditionalQuestions(initialMbtiType) {
         quizContainer.innerHTML += `
             <div id="additional-questions">
+            <p style="color: red;">Please note both the answers should be more than or equal to 100 words</p>
                 <div>
                     <label for="question1">How do you navigate challenges and setbacks in your journey?</label>
                     <br>
                     <textarea id="question1" rows="6" cols="50"></textarea>
+                    <div id="wordCount1">Word Count: 0</div>
                 </div>
                 <div>
                     <label for="question2">In what ways do you seek to grow and evolve as an individual?</label>
                     <br>
                     <textarea id="question2" rows="6" cols="50"></textarea>
+                    <div id="wordCount2">Word Count: 0</div>
                 </div>
-                <button id="finalSubmit">Submit Answers</button>
+                <button id="finalSubmit" disabled>Submit Answers</button>
             </div>
         `;
 
-        document.getElementById('finalSubmit').addEventListener('click', () => {
+        const finalSubmitButton = document.getElementById('finalSubmit');
+
+        finalSubmitButton.addEventListener('click', () => {
             const answer1 = document.getElementById('question1').value;
             const answer2 = document.getElementById('question2').value;
             const combinedAnswers = `${answer1} ${answer2}`;
 
-            // Hide additional questions
-            document.getElementById('additional-questions').style.display = 'none';
+            // Check if both answers meet the minimum word count
+            if (validateAnswers(answer1, answer2)) {
+                // Hide additional questions
+                document.getElementById('additional-questions').style.display = 'none';
 
-            // Show and initialize the loading animation
-            showLoadingAnimation(true);
-            
-            sendTextForFinalPrediction(initialMbtiType, combinedAnswers);
+                // Show and initialize the loading animation
+                showLoadingAnimation(true);
+                
+                sendTextForFinalPrediction(initialMbtiType, combinedAnswers);
+            } else {
+                alert('Both answers must have at least 100 words.');
+            }
         });
+
+        // Enable/disable submit button based on input length
+        const answerInputs = document.querySelectorAll('textarea');
+        answerInputs.forEach((input, index) => {
+            input.addEventListener('input', () => {
+                const wordCount = input.value.trim().split(/\s+/).length;
+                const wordCountElement = document.getElementById(`wordCount${index + 1}`);
+                wordCountElement.textContent = `Word Count: ${wordCount}`;
+                const answer1Length = document.getElementById('question1').value.trim().split(/\s+/).length;
+                const answer2Length = document.getElementById('question2').value.trim().split(/\s+/).length;
+                if (answer1Length >= 100 && answer2Length >= 100) {
+                    finalSubmitButton.disabled = false;
+                } else {
+                    finalSubmitButton.disabled = true;
+                }
+            });
+        });
+    }
+
+    function validateAnswers(answer1, answer2) {
+        // Check if both answers have at least 100 words
+        const words1 = answer1.trim().split(/\s+/).length;
+        const words2 = answer2.trim().split(/\s+/).length;
+        return words1 >= 100 && words2 >= 100;
     }
 
     function sendTextForFinalPrediction(initialMbtiType, textAnswers) {
@@ -96,17 +130,105 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(response => response.json())
         .then(data => {
-            document.getElementById('quiz').innerHTML = `<h2>Your refined personality type is: ${data.final_mbti_type}</h2> <button id="restart">Restart</button>`;
+            const finalMbtiType = data.final_mbti_type;
+            const iComponent = finalMbtiType[0] === 'I' ? 'Introversion' : 'Extraversion';
+            const sComponent = finalMbtiType[1] === 'S' ? 'Sensing' : 'Intuition';
+            const tComponent = finalMbtiType[2] === 'T' ? 'Thinking' : 'Feeling';
+            const jComponent = finalMbtiType[3] === 'J' ? 'Judging' : 'Perceiving';
+
+            let baselineExplanation = '';
+            switch (finalMbtiType) {
+                case 'ISTJ':
+                    baselineExplanation = 'ISTJs are responsible organizers, driven to create and enforce order within systems and institutions.';
+                    break;
+                case 'ISFJ':
+                    baselineExplanation = 'ISFJs are industrious caretakers, loyal to traditions and organizations.';
+                    break;
+                case 'INFJ':
+                    baselineExplanation = 'INFJs are empathetic visionaries, driven by their own personal values to create a better world.';
+                    break;
+                case 'INTJ':
+                    baselineExplanation = 'INTJs are analytical problem-solvers, eager to improve systems and processes with their innovative ideas.';
+                    break;
+                case 'ISTP':
+                    baselineExplanation = 'ISTPs are adaptable thrill-seekers, always looking for practical solutions to complex problems.';
+                    break;
+                case 'ISFP':
+                    baselineExplanation = 'ISFPs are gentle caretakers, tuned into their inner values and committed to living in the present moment.';
+                    break;
+                case 'INFP':
+                    baselineExplanation = 'INFPs are imaginative idealists, guided by their own core values and beliefs.';
+                    break;
+                case 'INTP':
+                    baselineExplanation = 'INTPs are logical innovators, fascinated by theoretical possibilities and complex puzzles.';
+                    break;
+                case 'ESTP':
+                    baselineExplanation = 'ESTPs are energetic problem-solvers, skilled in overcoming challenges and seizing opportunities.';
+                    break;
+                case 'ESFP':
+                    baselineExplanation = 'ESFPs are vivacious entertainers, always ready to explore and experience something new.';
+                    break;
+                case 'ENFP':
+                    baselineExplanation = 'ENFPs are enthusiastic innovators, always seeing new possibilities and following their inspirations.';
+                    break;
+                case 'ENTP':
+                    baselineExplanation = 'ENTPs are imaginative thinkers, skilled in seeing new possibilities and coming up with innovative solutions.';
+                    break;
+                case 'ESTJ':
+                    baselineExplanation = 'ESTJs are hardworking traditionalists, eager to take charge in organizing projects and people.';
+                    break;
+                case 'ESFJ':
+                    baselineExplanation = 'ESFJs are conscientious helpers, sensitive to the needs of others and eager to contribute to their well-being.';
+                    break;
+                case 'ENFJ':
+                    baselineExplanation = 'ENFJs are charismatic leaders, driven by their own personal values to help and inspire others.';
+                    break;
+                case 'ENTJ':
+                    baselineExplanation = 'ENTJs are strategic organizers, motivated to bring order and efficiency to their environment.';
+                    break;
+                default:
+                    baselineExplanation = 'Baseline explanation for the MBTI type could be added here.';
+                    break;
+            }
+
+            document.getElementById('quiz').innerHTML = `
+                <h2>Your personality type based on your answers is: ${finalMbtiType}</h2>
+                <p> ${iComponent}</p>
+                <p> ${sComponent}</p>
+                <p> ${tComponent}</p>
+                <p> ${jComponent}</p>
+                <p>what it means: ${baselineExplanation}</p>
+                <button id="restart">Restart</button>
+            `;
+            
             document.getElementById('restart').addEventListener('click', () => {
                 location.reload();
             });
+            saveMbtiTypeToProfile(finalMbtiType);
         })
         .catch(error => console.error('Failed to get the final MBTI prediction:', error));
     }
 
+    function saveMbtiTypeToProfile(mbtiType) {
+        fetch('/core/save-mbti-profile/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                'mbti_type': mbtiType
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('MBTI type saved to profile:', data.status);
+            // Optionally, you can perform further actions here
+        })
+        .catch(error => console.error('Failed to save MBTI type to profile:', error));
+    }
+
     function calculatePersonalityType(selections) {
-        // Placeholder for your calculatePersonalityType function
-        // Replace this with your actual logic
         const counts = { I: 0, E: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
         selections.forEach(trait => counts[trait]++);
         let personalityType = '';

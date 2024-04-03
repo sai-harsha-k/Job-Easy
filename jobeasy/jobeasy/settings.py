@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-4)j*prenu@64&cdawx^q$lfv*o+8dvfg%7kg(xwbval2^t35k#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
 
 
 # Application definition
@@ -85,8 +85,12 @@ DATABASES = {
         'PORT': '3306',
     }
 }
-
-
+http = 'https://'
+end_point = 'ced9-2601-646-a002-57b0-dcc6-c444-ac3a-2e22.ngrok-free.app'
+ALLOWED_HOSTS = [end_point,]
+CSRF_TRUSTED_ORIGINS = [http+end_point, http+end_point+'/core']
+CSRF_ALLOWED_ORIGINS = [http+end_point,http+end_point+'/core']
+CORS_ORIGINS_WHITELIST = [http+end_point,http+end_point+'/core']
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
