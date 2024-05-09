@@ -4,20 +4,27 @@
 {% block content %}
 <div class="container mt-4">
     <div class="row">
+        <!-- Theme Switcher--> 
+        <div class="theme-switch-wrapper">
+            <label class="theme-switch" for="theme-toggle">
+                <input type="checkbox" id="theme-toggle">
+                <div class="slider round"></div>
+            </label>
+        </div>
         <!-- Search Input Field and Suggestions Container -->
         <div class="col-12 mt-4">
-            <div class="card light-blue-card"> <!-- Added custom class here -->
+            <div class="card light-blue-card shadow-sm"> <!-- Added shadow for better appearance -->
                 <div class="card-body">
                     <h5 class="card-title">Search Jobs</h5>
                     <div class="form-group">
                         <input type="text" id="searchInput" class="form-control" placeholder="Search jobs...">
                     </div>
-                    <div id="suggestionsBox"></div> <!-- Container for autocomplete suggestions -->
+                    <div id="suggestionsBox" class="suggestions-box mt-2 p-2"></div> <!-- Container for autocomplete suggestions with styling -->
                 </div>
             </div>
         </div>
         <div class="col-md-6 mt-4">
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">Search Jobs by Your Skills</h5>
                     <p class="card-text">Find jobs that match the skills extracted from your resume.</p>
@@ -27,7 +34,7 @@
         </div>
         <!-- Card for Quiz -->
         <div class="col-md-6 mt-4">
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">Personality Quiz</h5>
                     <p class="card-text">Take our personality quiz to understand more about yourself.</p>
@@ -37,7 +44,7 @@
         </div>
         {% if mbti_type %}
         <div class="col-md-6 mt-4">
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">Jobs Matching Your Personality ({{ mbti_type }})</h5>
                     <p class="card-text">Explore jobs that suit your personality.</p>
@@ -49,11 +56,21 @@
         <!-- Card for Resume Upload -->
         <!-- Inside dashboard.html, update the card for Skills Display -->
         <div class="col-md-6 mt-4">
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">Your Skills</h5>
                     <p class="card-text">See the skills extracted from your resume.</p>
                     <a href="{% url 'core:display_skills' %}" class="btn btn-primary">View Skills</a>
+                </div>
+            </div>
+        </div>
+        <!-- New container for displaying filtered jobs based on skills and MBTI type -->
+        <div class="col-md-12 mt-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Filtered Jobs</h5>
+                    <p class="card-text">Jobs filtered based on skills and MBTI type</p>
+                    <a href="{% url 'core:filtered_jobs' %}" class="btn btn-primary">View Filtered Jobs</a>
                 </div>
             </div>
         </div>
@@ -112,10 +129,6 @@
                         div.innerHTML = `${item.text.substring(0, typedIndex)}<span class="typed">${typedPortion}</span>${remainingPortion}`;
 
                         div.addEventListener('click', () => {
-                            // Fill the search input with the clicked suggestion's text
-                            //searchInput.value = item.text;
-                            // Redirect to the suggestion's URL if needed
-                            //window.location.href = item.url;
                             window.location.href = `/core/search/?q=${encodeURIComponent(item.text)}`;
                         });
                         suggestionsBox.appendChild(div);
@@ -160,22 +173,173 @@
             }
         });
     });
+    document.getElementById('theme-toggle').addEventListener('change', function(event) {
+        if (this.checked) {
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
+    });
 </script>
 
 <style>
-    .typed {
-        font-weight: bold; /* Example: Make the typed portion bold */
-        color: blue; /* Example: Make the typed portion blue */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f8f9fa;
     }
 
-    .highlighted {
-        background-color: #f0f0f0; /* Example: Highlight the currently selected suggestion */
+    .container {
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    .card {
+        border-radius: 8px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
     }
 
     .light-blue-card {
-        background-color: #add8e6; /* LightBlue color */
+        background-color: #e3f2fd; /* Light blue background for the card */
+    }
+
+    .suggestions-box {
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        max-height: 200px;
+        overflow-y: auto;
+        background-color: white;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    .suggestion-item {
+        padding: 8px 16px;
+        cursor: pointer;
+    }
+
+    .suggestion-item:hover,
+    .highlighted {
+        background-color: #f0f0f0;
+    }
+
+    .typed {
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .modal-content {
+        border-radius: 8px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: var(--bg-color, #f8f9fa);
+        color: var(--text-color, #000);
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    .card {
+        border-radius: 8px;
+        background-color: var(--card-bg, #fff);
+        margin: 10px 0;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: background-color 0.3s;
+    }
+
+    .btn-primary {
+        background-color: var(--btn-bg, #007bff);
+        color: var(--btn-text, #fff);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--btn-hover-bg, #0056b3);
+    }
+
+    /* Theme Switch Style */
+    .theme-switch-wrapper {
+        position: absolute;
+        right: 10px; /* Adjusts the position to the top right corner */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .theme-switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+    .theme-switch input {
+        display: none;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(26px);
+    }
+
+    body.dark-mode {
+        --bg-color: #343a40;
+        --text-color: #ffffff;
+        --card-bg: #495057;
+        --btn-bg: #6c757d;
+        --btn-text: #ffffff;
+        --btn-hover-bg: #5a6268;
     }
 </style>
 {% endblock %}
-
-

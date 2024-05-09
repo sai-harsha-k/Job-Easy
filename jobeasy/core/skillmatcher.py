@@ -53,7 +53,7 @@ def process_resume(file_path, file_type, skills_list, section_headings):
     skill_details = assign_skill_weights(text, skills_lower, section_headings)
     return skill_details
 
-non_skill_keywords = ["jose", "engineering", "benchmark", "system", "sales", "money"]
+non_skill_keywords = ["mining","jose", "engineering", "benchmark", "system", "sales", "money", "communication"]
 section_headings = [
     "Work Experience", "Experience", "Professional Experience", "Employment History",
     "Education", "Academic Background", "Qualifications",

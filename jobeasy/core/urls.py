@@ -25,4 +25,5 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     path('search-jobs-by-skills/', views.search_jobs_by_skills, name='search_jobs_by_skills'),
     path('final-mbti-prediction/', views.final_mbti_prediction, name='final_mbti_prediction'),
+    path('filtered-jobs/', views.filtered_jobs_view, name='filtered_jobs'),
 ]

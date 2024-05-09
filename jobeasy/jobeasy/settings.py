@@ -87,7 +87,7 @@ DATABASES = {
 }
 http = 'https://'
 end_point = 'ced9-2601-646-a002-57b0-dcc6-c444-ac3a-2e22.ngrok-free.app'
-ALLOWED_HOSTS = [end_point,]
+ALLOWED_HOSTS = [end_point,'127.0.0.1']
 CSRF_TRUSTED_ORIGINS = [http+end_point, http+end_point+'/core']
 CSRF_ALLOWED_ORIGINS = [http+end_point,http+end_point+'/core']
 CORS_ORIGINS_WHITELIST = [http+end_point,http+end_point+'/core']

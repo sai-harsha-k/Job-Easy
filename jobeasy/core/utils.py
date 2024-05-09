@@ -8,7 +8,7 @@ import nltk
 def create_inverted_index(jobs):
     inverted_index = {}
     for job in jobs:
-        job_skills = job.skills.split(',')  # Assuming skills are stored as a comma-separated string
+        job_skills = job.skills.split(',') 
         for skill in job_skills:
             skill = skill.strip().lower()
             if skill not in inverted_index:

@@ -18,26 +18,28 @@ class Command(BaseCommand):
             for row in reader:
                 try:
                     # Parse the job posting date from string to date object
-                    job_posting_date = datetime.strptime(row['Job Posting Date'], '%Y-%m-%d').date()  # adjust the date format if it's different
+                    # job_posting_date = datetime.strptime(row['Job_Posting_Date'], '%Y-%m-%d').date()  # adjust the date format if it's different
+                    job_posting_date = datetime.strptime(row['Job_Posting_Date'], '%m/%d/%Y').date()
+
 
                     # Ensure that model fields match CSV column names
                     Jobdetails.objects.create(
-                        experience=row['Experience'],
-                        qualifications=row['Qualifications'],
-                        salary_range=row['Salary Range'],
-                        location=row['location'],
-                        country=row['Country'],
-                        work_type=row['Work Type'],
-                        job_posting_date=job_posting_date,
-                        job_title=row['Job Title'],
-                        role=row['Role'],
-                        job_portal=row['Job Portal'],
-                        job_description=row['Job Description'],
-                        skills=row['skills'],
-                        responsibilities=row['Responsibilities'],
-                        company=row['Company'],
-                        mbti=row['mbti']
-                    )
+    experience=row['Experience'],
+    qualifications=row['Qualifications'],
+    salary_range=row['Salary_Range'],
+    location=row['Location'],
+    country=row['Country'],
+    work_type=row['Work_Type'],
+    job_posting_date=job_posting_date,
+    job_title=row['Job_Title'],
+    role=row['Role'],
+    job_portal=row['Job_Portal'],
+    job_description=row['Job_Description'],
+    skills=row['skills'],
+    responsibilities=row['Responsibilities'],
+    company=row['Company'],
+    mbti=row['mbti']
+)
 
                     success_count += 1
 

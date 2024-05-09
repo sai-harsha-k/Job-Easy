@@ -1,9 +1,65 @@
-{% extends 'core/base.html' %}  <!-- Assume you have a base template -->
+{% extends 'core/base.html' %}
+
 {% block content %}
-    <h2>Top Skills</h2>
-    <ul>
+<style>
+    .skills-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        margin: 20px 0;
+    }
+    .skill-card {
+        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: center;
+        width: 200px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .skill-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    .skill-icon {
+        font-size: 40px;
+        margin-bottom: 10px;
+        color: #4a90e2;
+    }
+    .skill-name {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .skill-level {
+        font-size: 14px;
+        color: #555;
+    }
+    .skills-title {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+</style>
+
+<div class="skills-title">Top Skills Extracted from Your Resume</div>
+
+<div class="skills-container">
     {% for skill, details in skills %}
-        <li>{{ skill }} (Weight: {{ details.weight }}, Sections: {{ details.sections|join:", " }})</li>
+    <div class="skill-card">
+        <div class="skill-icon">
+            <i class="{{ details.icon_class }}"></i>
+        </div>
+        <div class="skill-name">{{ skill }}</div>
+        <div class="skill-level">{{ details.level }}</div>
+    </div>
     {% endfor %}
-    </ul>
+</div>
+
+<div style="text-align: center; margin-top: 20px;">
+    <p>If you believe the skills does not reflect your true skills, try modifying your resume to make it more impactful or you can update your skills <a href="{% url 'core:update_profile' %}" style="text-decoration: underline;"><strong>here</strong></a>.</p>
+</div>
+
 {% endblock %}

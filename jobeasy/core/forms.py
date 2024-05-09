@@ -5,8 +5,10 @@ from django_select2.forms import Select2Widget
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['address', 'phone_number']
-
+        fields = [ 'address', 'phone_number', 'mbti_type', 'skills']
+        widgets = {
+            'skills': forms.Textarea(attrs={'rows': 4, 'cols': 40}),  # Use a Textarea for skills field
+        }
 class ResumeUploadForm(forms.Form):
     resume = forms.FileField(label='Upload your resume')
 

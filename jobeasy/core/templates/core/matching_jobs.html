@@ -1,36 +1,65 @@
+<!-- core/templates/core/filtered_jobs.html -->
+
 {% extends 'core/base.html' %}
-
 {% block content %}
-<div class="container">
-    <h1>Jobs Matching Your Personality: {{ mbti_type }}</h1>
-    {% for job in page_obj %}
-        <div>
-            <h2><a href="{% url 'core:job_details' job.job_id %}" class="list-group-item list-group-item-action">{{ job.job_title }}</a></h2>
-            <p>Location: {{ job.location }},     Company: {{ job.company }}</p>
-            
-            <!-- Add more job details as needed -->
+<div class="container mt-4">
+    <h1 class="text-center">Jobs Matching Your Personality: {{ mbti_type }}</h1>
+    {% if page_obj %}
+        <div class="row">
+            {% for job in page_obj %}
+                <div class="col-12 mb-4">
+                    <div class="card h-100 job-card">
+                        <div class="card-body">
+                            <h2 class="card-title"><a href="{% url 'core:job_details' job.job_id %}" class="list-group-item list-group-item-action">{{ job.job_title }}</a></h2>
+                            <p class="card-text">
+                                <strong>Location:</strong> {{ job.location }}, 
+                                <strong>Company:</strong> {{ job.company }}
+                            </p>
+                            <!-- Add more job details as needed -->
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-    {% empty %}
-        <p>No matching jobs found.</p>
-    {% endfor %}
 
-    <!-- Pagination Controls -->
-    <div class="pagination">
-        <span class="step-links">
-            {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-            {% endif %}
+        <!-- Pagination Controls -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" aria-label="First">
+                            <span aria-hidden="true">&laquo; First</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&lsaquo; Previous</span>
+                        </a>
+                    </li>
+                {% endif %}
 
-            <span class="current">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-            </span>
+                <li class="page-item disabled">
+                    <span class="page-link">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                    </span>
+                </li>
 
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-            {% endif %}
-        </span>
-    </div>
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">Next &rsaquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                            <span aria-hidden="true">Last &raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% else %}
+        <p class="text-center">No matching jobs found.</p>
+    {% endif %}
 </div>
 {% endblock %}

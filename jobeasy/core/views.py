@@ -27,6 +27,9 @@ from django.db.models.expressions import RawSQL
 from django.urls import reverse
 from .utils import create_inverted_index, refine_mbti_with_baseline,prepro
 import joblib
+from functools import reduce
+import operator
+
 
 class CustomPasswordChangeDoneView(PasswordChangeDoneView):
     template_name = 'core/password_change_done.html'
@@ -143,6 +146,8 @@ def final_mbti_prediction(request):
         final_mbti_type = refine_mbti_with_baseline(initial_mbti_type, predictions, confidences, thresholds)
         print(final_mbti_type)
 
+        
+
         return JsonResponse({'final_mbti_type': final_mbti_type})
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
@@ -190,7 +195,7 @@ def save_mbti_to_profile(request):
 
 def matching_jobs_view(request, mbti_type):
     # Fetch jobs matching the MBTI type
-    matching_jobs = Jobdetails.objects.filter(mbti=mbti_type)
+    matching_jobs = Jobdetails.objects.filter(mbti=mbti_type)[:50]
 
     # Set up pagination
     paginator = Paginator(matching_jobs, 10)  # Show 10 jobs per page
@@ -210,15 +215,23 @@ def autocomplete_search(request):
     query = request.GET.get('q', '')
     suggestions = []
     if query:
-        jobdetails = Jobdetails.objects.filter(job_title__icontains=query)[:10]  # Limit the results
+        # Filter job details based on job title, company name, or location containing the query
+        jobdetails = Jobdetails.objects.filter(
+            Q(job_title__icontains=query) | 
+            Q(company__icontains=query) | 
+            Q(location__icontains=query)
+        )[:10]  # Limit the number of suggestions to 10
+
+        # Create suggestion objects containing job title, company name, location, and job ID
         suggestions = [
             {
                 'id': job.job_id,
-                'text': job.job_title,
-                'url': reverse('core:job_details', kwargs={'job_id': job.job_id})  # Generate URL for job details
+                'text': f"{job.job_title} at {job.company} - {job.location}",
+                'url': reverse('core:job_details', kwargs={'job_id': job.job_id})
             }
             for job in jobdetails
         ]
+
     return JsonResponse({'suggestions': suggestions})
 
 def search(request):
@@ -258,27 +271,56 @@ def search(request):
 
 @login_required
 def search_jobs_by_skills(request):
-    # Fetch the current user's profile
-    user_profile = UserProfile.objects.get(user=request.user)
+    try:
+        # Fetch the current user's profile
+        user_profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        # Handle the case where the user profile does not exist
+        return render(request, 'core/error.html', {'message': 'User profile not found.'})
 
-    # Extract skills from the user's profile; it's stored as JSON
+    # Extract skills from the user's profile; assuming it's stored as a JSON array
     user_skills = user_profile.skills if user_profile.skills else []
 
-    # Fetch all jobs from the database
-    all_jobs = Jobdetails.objects.all()
+    if not user_skills:
+        # If the user has no skills listed, return an empty result
+        return render(request, 'core/skill_matching_jobs.html', {'jobs': []})
 
-    # Create the inverted index
-    inverted_index = create_inverted_index(all_jobs)
-
-    # Use 'inverted_index' to quickly find jobs by skills
-    matching_job_ids = set()
+    # Build the Q object for filtering jobs by skills
+    skills_query = Q()
     for skill in user_skills:
-        skill = skill.lower()  # Assuming skills are stored in lowercase in the inverted index
-        if skill in inverted_index:
-            matching_job_ids.update(inverted_index[skill])
+        skills_query |= Q(skills__icontains=skill.strip().lower())
 
-    # Fetch matching jobs from the database
-    matching_jobs = Jobdetails.objects.filter(job_id__in=matching_job_ids)
+    # Fetch matching jobs from the database, ordered by job posting date
+    matching_jobs = Jobdetails.objects.filter(skills_query).order_by('-job_posting_date')[:50]
 
-    # Render some template with the matching jobs
-    return render(request, 'core/skill_matching_jobs.html', {'jobs': matching_jobs})
+    # Paginate the results
+    paginator = Paginator(matching_jobs, 10)  # Show 10 jobs per page
+    page = request.GET.get('page')
+
+    try:
+        jobs = paginator.page(page)
+    except PageNotAnInteger:
+        jobs = paginator.page(1)
+    except EmptyPage:
+        jobs = paginator.page(paginator.num_pages)
+
+    # Render the template with the matching jobs and pagination data
+    return render(request, 'core/skill_matching_jobs.html', {'jobs': jobs})
+
+def filtered_jobs_view(request):
+    # Get the current user's profile
+    user_profile = request.user.profile
+
+    # Get the user's skills
+    user_skills = user_profile.skills.split(',') if user_profile.skills else []
+
+    # Get the user's MBTI type
+    mbti_type = user_profile.mbti_type
+
+    # Fetch jobs matching both skills and MBTI type
+    matching_jobs = Jobdetails.objects.filter(
+        Q(mbti=mbti_type) & 
+        reduce(operator.or_, (Q(skills__icontains=skill.strip().lower()) for skill in user_skills))
+    ).distinct()[:50]  # Limit to 50 jobs
+
+    return render(request, 'core/filtered_jobs.html', {'matching_jobs': matching_jobs})

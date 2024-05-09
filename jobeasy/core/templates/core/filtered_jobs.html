@@ -1,12 +1,12 @@
-<!-- core/templates/core/matching_jobs.html -->
+<!-- core/templates/core/filtered_jobs.html -->
 
 {% extends 'core/base.html' %}
 {% block content %}
 <div class="container mt-4">
-    <h1 class="text-center mb-4">Matching Jobs</h1>
-    {% if jobs %}
+    <h1 class="text-center mb-4">Filtered Jobs</h1>
+    {% if matching_jobs %}
         <div class="row">
-            {% for job in jobs %}
+            {% for job in matching_jobs %}
                 <div class="col-12 mb-4">
                     <div class="card h-100 job-card">
                         <div class="card-body">
@@ -27,14 +27,14 @@
         <!-- Pagination links -->
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
-                {% if jobs.has_previous %}
+                {% if matching_jobs.has_previous %}
                     <li class="page-item">
                         <a class="page-link" href="?page=1" aria-label="First">
                             <span aria-hidden="true">&laquo; First</span>
                         </a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ jobs.previous_page_number }}" aria-label="Previous">
+                        <a class="page-link" href="?page={{ matching_jobs.previous_page_number }}" aria-label="Previous">
                             <span aria-hidden="true">&lsaquo; Previous</span>
                         </a>
                     </li>
@@ -42,18 +42,18 @@
 
                 <li class="page-item disabled">
                     <span class="page-link">
-                        Page {{ jobs.number }} of {{ jobs.paginator.num_pages }}
+                        Page {{ matching_jobs.number }} of {{ matching_jobs.paginator.num_pages }}
                     </span>
                 </li>
 
-                {% if jobs.has_next %}
+                {% if matching_jobs.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ jobs.next_page_number }}" aria-label="Next">
+                        <a class="page-link" href="?page={{ matching_jobs.next_page_number }}" aria-label="Next">
                             <span aria-hidden="true">Next &rsaquo;</span>
                         </a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ jobs.paginator.num_pages }}" aria-label="Last">
+                        <a class="page-link" href="?page={{ matching_jobs.paginator.num_pages }}" aria-label="Last">
                             <span aria-hidden="true">Last &raquo;</span>
                         </a>
                     </li>
