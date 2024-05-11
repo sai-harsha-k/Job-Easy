@@ -60,6 +60,10 @@ Job Easy is a web application designed to simplify the job search process. This 
 
 Once the server is running, open your web browser and navigate to `http://127.0.0.1:8000` to access the Job Easy application.
 
+## Homepage
+
+![Homepage Screenshot](assets/homepage.png)
+
 ## Project Structure
 
 - `core/`: Contains the core Django application files including models, views, and URLs.
@@ -105,3 +109,4 @@ We welcome contributions! Please follow these steps:
 3. Make your changes and commit them (`git commit -m 'Add new feature'`).
 4. Push to the branch (`git push origin feature-branch`).
 5. Create a pull request.
+
