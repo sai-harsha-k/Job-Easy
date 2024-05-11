@@ -4,18 +4,27 @@ Job Easy is a web application designed to simplify the job search process. This 
 
 ## Table of Contents
 
-- [Features](#features)
+- [Key Features](#key-features)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Homepage](#homepage)
 - [Project Structure](#project-structure)
 - [Contributing](#contributing)
 
-## Features
+## Key Features
 
-- Browse job listings
-- Apply for jobs
-- Track application status
-- Manage job search progress
+- **User Registration and Login**: Secure user authentication allowing users to register, log in, and manage their accounts.
+- **Personality Assessment Quiz**: Users can take a personality quiz to help tailor job recommendations.
+- **Resume Upload**: Users can upload their resumes in PDF or DOCX.
+- **Personality Prediction**: Utilizes machine learning models to predict users' MBTI personality type based on quiz answers and essay answers analysis.
+- **Personalized Job Matching**: Aligns job recommendations with users' personality and skills for a better job fit.
+- **Browse Job Listings**: Users can browse a wide range of job listings that are matched to their profiles.
+- **Apply for Jobs**: Easy application process for jobs directly through the platform.
+- **Manage Job Search Progress**: Dashboard for users to manage their job search activities, view recommended jobs, and monitor application statuses.
+- **Job Recommendations**: Provides personalized job recommendations based on users' MBTI type and extracted skills.
+- **Search Jobs by Skills**: Allows users to search for jobs based on specific skills listed in their profiles.
+- **Detailed Job Descriptions**: Provides comprehensive job descriptions and application instructions.
+- **Data Security**: Ensures user data is securely stored and processed, adhering to best practices in data privacy and security.
 
 ## Installation
 
@@ -109,4 +118,3 @@ We welcome contributions! Please follow these steps:
 3. Make your changes and commit them (`git commit -m 'Add new feature'`).
 4. Push to the branch (`git push origin feature-branch`).
 5. Create a pull request.
-
