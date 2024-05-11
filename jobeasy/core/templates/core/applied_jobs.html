@@ -1,0 +1,30 @@
+<!-- core/templates/core/applied_jobs.html -->
+
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Applied Jobs</h1>
+    {% if applied_jobs %}
+        <div class="row">
+            {% for applied_job in applied_jobs %}
+                <div class="col-12 mb-4">
+                    <div class="card h-100 job-card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ applied_job.job.job_title }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ applied_job.job.company }}</h6>
+                            <p class="card-text">
+                                <strong>Location:</strong> {{ applied_job.job.location }}<br>
+                                <strong>Work Type:</strong> {{ applied_job.job.work_type }}<br>
+                                <strong>Applied on:</strong> {{ applied_job.applied_date|date:"M d, Y" }}
+                            </p>
+                            <a href="{% url 'core:job_details' applied_job.job.job_id %}" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center">No jobs applied for yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

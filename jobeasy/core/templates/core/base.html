@@ -57,6 +57,10 @@
                 <li class="nav-item">
                     <button class="btn btn-link nav-link" data-toggle="modal" data-target="#updateResumeModal">Update Resume</button>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'core:applied_jobs' %}">Applied Jobs</a>
+                </li>
                 {% endif %}
             </ul>
             {% if user.is_authenticated %}

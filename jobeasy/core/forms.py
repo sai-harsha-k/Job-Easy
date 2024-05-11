@@ -5,7 +5,7 @@ from django_select2.forms import Select2Widget
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = [ 'address', 'phone_number', 'mbti_type', 'skills']
+        fields = [ 'address', 'phone_number', 'skills']
         widgets = {
             'skills': forms.Textarea(attrs={'rows': 4, 'cols': 40}),  # Use a Textarea for skills field
         }

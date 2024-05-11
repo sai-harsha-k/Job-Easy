@@ -137,27 +137,42 @@ class DjangoSession(models.Model):
 
 
 class Jobdetails(models.Model):
-    job_id = models.AutoField(primary_key=True, db_column='job_id')
-    experience = models.CharField(db_column='Experience', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    qualifications = models.CharField(db_column='Qualifications', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    salary_range = models.CharField(db_column='Salary_Range', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    job_id = models.AutoField(primary_key=True, db_column='job_id', default=1)  # Provide a default value
+    experience = models.CharField(max_length=255, blank=True, null=True)
+    qualifications = models.CharField(max_length=255, blank=True, null=True)
+    salary_range = models.CharField(max_length=255, blank=True, null=True)
     location = models.CharField(max_length=255, blank=True, null=True)
-    country = models.CharField(db_column='Country', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    work_type = models.CharField(db_column='Work_Type', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    job_posting_date = models.DateField(db_column='Job_Posting_Date', blank=True, null=True)  # Field name made lowercase.
-    job_title = models.CharField(db_column='Job_Title', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    role = models.CharField(db_column='Role', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    job_portal = models.CharField(db_column='Job_Portal', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    job_description = models.TextField(db_column='Job_Description', blank=True, null=True)  # Field name made lowercase.
+    country = models.CharField(max_length=255, blank=True, null=True)
+    work_type = models.CharField(max_length=255, blank=True, null=True)
+    job_posting_date = models.DateField(blank=True, null=True)
+    job_title = models.CharField(max_length=255, blank=True, null=True)
+    role = models.CharField(max_length=255, blank=True, null=True)
+    job_portal = models.CharField(max_length=255, blank=True, null=True)
+    job_description = models.TextField(blank=True, null=True)
     skills = models.TextField(blank=True, null=True)
-    responsibilities = models.TextField(db_column='Responsibilities', blank=True, null=True)  # Field name made lowercase.
-    company = models.CharField(db_column='Company', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    responsibilities = models.TextField(blank=True, null=True)
+    company = models.CharField(max_length=255, blank=True, null=True)
     mbti = models.CharField(max_length=4, blank=True, null=True, db_index=True)
 
     class Meta:
         managed = False
         db_table = 'jobdetails'
+    
     def __str__(self):
         return self.job_title
+    
     def get_absolute_url(self):
         return reverse('job_detail', args=[str(self.pk)])
+
+class AppliedJob(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    job = models.ForeignKey(Jobdetails, on_delete=models.CASCADE)
+    applied_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = False
+        unique_together = ('user', 'job')
+        db_table = 'applied_jobs'
+    
+    def __str__(self):
+        return f"{self.user.username} applied for {self.job.job_title}"

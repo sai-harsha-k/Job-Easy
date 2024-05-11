@@ -21,7 +21,7 @@ from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from .models import UserProfile
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404
-from .models import Jobdetails
+from .models import Jobdetails, AppliedJob
 from django.db.models import Q
 from django.db.models.expressions import RawSQL
 from django.urls import reverse
@@ -322,5 +322,25 @@ def filtered_jobs_view(request):
         Q(mbti=mbti_type) & 
         reduce(operator.or_, (Q(skills__icontains=skill.strip().lower()) for skill in user_skills))
     ).distinct()[:50]  # Limit to 50 jobs
+    applied_jobs = AppliedJob.objects.filter(user=request.user).values_list('job_id', flat=True)
 
-    return render(request, 'core/filtered_jobs.html', {'matching_jobs': matching_jobs})
+    paginator = Paginator(matching_jobs, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'core/filtered_jobs.html', {
+        'page_obj': page_obj,
+        'mbti_type': mbti_type,
+        'applied_jobs': applied_jobs,
+    })
+
+@login_required
+def apply_for_job(request, job_id):
+    job = get_object_or_404(Jobdetails, pk=job_id)
+    AppliedJob.objects.get_or_create(user=request.user, job=job)
+    return redirect('core:filtered_jobs')
+
+@login_required
+def applied_jobs(request):
+    applied_jobs = AppliedJob.objects.filter(user=request.user)
+    return render(request, 'core/applied_jobs.html', {'applied_jobs': applied_jobs})
