@@ -9,8 +9,11 @@ Job Easy is a web application designed to simplify the job search process. This 
 - [Usage](#usage)
 - [Homepage](#homepage)
 - [Project Structure](#project-structure)
-- [Contributing](#contributing)
+- [ML Models](#ml-models)
 - [Diagram](#diagram)
+- [Contributing](#contributing)
+
+
 
 ## Key Features
 
@@ -110,6 +113,20 @@ Once the server is running, open your web browser and navigate to `http://127.0.
   - `mbti_1.csv`: This dataset includes MBTI types and corresponding text posts. It serves as a reference for running analyses or building preliminary models. However, the actual dataset used to develop our models cannot be shared due to a non-disclosure agreement with the dataset owner.
   - `skills.csv`: Dataset containing a list of skills.
 
+## ML Models
+
+We have a comprehensive notebook detailing the implementation of our MBTI prediction model. This notebook includes the data preprocessing steps, model training, evaluation, and saving the trained models. You can find the notebook here: [MBTI Model Notebook](https://github.com/sai-harsha-k/Job-Easy/blob/main/jobeasy/core/ml_models/MBTI_model%20(2).ipynb)
+
+The notebook contains:
+- Data preprocessing steps including cleaning, tokenization, and TF-IDF vectorization.
+- Training of the CatBoost and SVM models for predicting MBTI dimensions.
+- Evaluation metrics to assess the performance of the models.
+- Steps to save and load the trained models for future predictions.
+
+## Diagram
+
+![Sequence Diagram](assets/diagram.png)
+
 ## Contributing
 
 We welcome contributions! Please follow these steps:
@@ -119,7 +136,3 @@ We welcome contributions! Please follow these steps:
 3. Make your changes and commit them (`git commit -m 'Add new feature'`).
 4. Push to the branch (`git push origin feature-branch`).
 5. Create a pull request.
-
-## Diagram
-
-![Sequence Diagram](assets/diagram.png)
