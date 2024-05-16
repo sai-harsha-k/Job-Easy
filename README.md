@@ -73,6 +73,7 @@ Job Easy is a web application designed to simplify the job search process. This 
 
 Once the server is running, open your web browser and navigate to `http://127.0.0.1:8000` to access the Job Easy application.
 
+
 ## Homepage
 
 ![Homepage Screenshot](assets/homepage.png)
@@ -112,6 +113,10 @@ Once the server is running, open your web browser and navigate to `http://127.0.
 - `data/`: Directory for storing datasets used in the project.
   - `mbti_1.csv`: This dataset includes MBTI types and corresponding text posts. It serves as a reference for running analyses or building preliminary models. However, the actual dataset used to develop our models cannot be shared due to a non-disclosure agreement with the dataset owner.
   - `skills.csv`: Dataset containing a list of skills.
+ 
+## Note
+
+**This dataset includes MBTI types and corresponding text posts. It serves as a reference for running analyses or building preliminary models. However, the actual dataset used to develop our models cannot be shared due to a non-disclosure agreement with the dataset owner.**
 
 ## ML Models
 
