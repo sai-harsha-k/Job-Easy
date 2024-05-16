@@ -107,7 +107,7 @@ Once the server is running, open your web browser and navigate to `http://127.0.
   - `train_models.py`: Script for training and saving machine learning models.
   - `evaluate_models.py`: Script for evaluating models and generating ROC and precision-recall curves.
 - `data/`: Directory for storing datasets used in the project.
-  - `mbti_1.csv`: Dataset containing MBTI types and text posts.
+  - `mbti_1.csv`: This dataset includes MBTI types and corresponding text posts. It serves as a reference for running analyses or building preliminary models. However, the actual dataset used to develop our models cannot be shared due to a non-disclosure agreement with the dataset owner.
   - `skills.csv`: Dataset containing a list of skills.
 
 ## Contributing
