@@ -10,6 +10,7 @@ Job Easy is a web application designed to simplify the job search process. This 
 - [Homepage](#homepage)
 - [Project Structure](#project-structure)
 - [Contributing](#contributing)
+- [Diagram](#diagram)
 
 ## Key Features
 
@@ -118,3 +119,7 @@ We welcome contributions! Please follow these steps:
 3. Make your changes and commit them (`git commit -m 'Add new feature'`).
 4. Push to the branch (`git push origin feature-branch`).
 5. Create a pull request.
+
+## Diagram
+
+![Sequence Diagram](assets/diagram.png)
